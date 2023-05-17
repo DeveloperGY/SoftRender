@@ -1,24 +1,25 @@
 #include "triangle.h"
 
-Triangle::Triangle(m3::vec4 v0, m3::vec4 v1, m3::vec4 v2)
+Triangle::Triangle(m3::vec3 v0, m3::vec3 v1, m3::vec3 v2)
 {
-    this->m_vertices[0] = v0;
-    this->m_vertices[1] = v1;
-    this->m_vertices[2] = v2;
+    this->vertices[0] = v0;
+    this->vertices[1] = v1;
+    this->vertices[2] = v2;
+
     return;
 }
 
-m3::vec4 Triangle::v0()
+m3::vec3 Triangle::v0()
 {
-    return this->m_vertices[0];
+    return this->vertices[0];
 }
 
-m3::vec4 Triangle::v1()
+m3::vec3 Triangle::v1()
 {
-    return this->m_vertices[1];
+    return this->vertices[1];
 }
 
-m3::vec4 Triangle::v2()
+m3::vec3 Triangle::v2()
 {
-    return this->m_vertices[2];
+    return this->vertices[2];
 }

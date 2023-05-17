@@ -1,20 +1,23 @@
 #pragma once
 
-#include "triangle.h"
-#include <vector>
+
+#include "mesh.h"
+
+#include <string>
+#include <math3d.h>
+
 
 class Model
 {
     private:
-        std::vector<Triangle> m_triangles;
-        m3::vec4 m_position;
+        Mesh mesh;
+        int color;
+        m3::vec3 pos;
+
 
     public: // Constructors/Destructor
-        Model();
-
-    public: // Getters/Setters
-        std::vector<Triangle> get_triangles();
-        m3::vec4 get_position();
-
+        Model(std::string filename, int color);
+    
+    public: // Utility
         m3::mat4 get_matrix();
 };

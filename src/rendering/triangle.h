@@ -5,13 +5,13 @@
 class Triangle
 {
     private:
-        m3::vec4 m_vertices[3];
+        m3::vec3 vertices[3];
 
     public: // Constructors/Destructor
-        Triangle(m3::vec4 v0, m3::vec4 v1, m3::vec4 v2);
+        Triangle(m3::vec3 v0, m3::vec3 v1, m3::vec3 v2);
 
     public: // Utility
-        m3::vec4 v0();
-        m3::vec4 v1();
-        m3::vec4 v2();
+        m3::vec3 v0();
+        m3::vec3 v1();
+        m3::vec3 v2();
 };
