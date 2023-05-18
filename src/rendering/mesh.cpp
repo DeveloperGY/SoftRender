@@ -14,6 +14,8 @@ Mesh::Mesh(std::string filename)
 
     std::vector<m3::vec3> vertices;
     std::vector<int> indices;
+    std::vector<m3::vec3> normals;
+    std::vector<int> n_indices;
 
 
     std::string line;
@@ -32,6 +34,12 @@ Mesh::Mesh(std::string filename)
             ss >> v0 >> v1 >> v2;
             vertices.push_back(m3::vec3(v0, v1, v2));
         }
+        else if (word == "vn")
+        {
+            float v0, v1, v2;
+            ss >> v0 >> v1 >> v2;
+            normals.push_back(m3::vec3(v0, v1, v2));
+        }
         else if(word == "f")
         {
             for (int i=0; i<3; i++)
@@ -40,10 +48,16 @@ Mesh::Mesh(std::string filename)
                 std::string index;
 
                 ss >> set;
-                std::getline(std::istringstream(set), index, '/');
 
+                std::istringstream setstream(set);
+
+                std::getline(setstream, index, '/');
                 indices.push_back(std::atoi(index.c_str()) - 1);
 
+                std::getline(setstream, index, '/');
+
+                std::getline(setstream, index, '/');
+                n_indices.push_back(std::atoi(index.c_str()) - 1);
             }
         }
     }
@@ -56,12 +70,22 @@ Mesh::Mesh(std::string filename)
         int i0 = indices.at(i);
         int i1 = indices.at(i+1);
         int i2 = indices.at(i+2);
+        
+        int ni0 = n_indices.at(i);
+        int ni1 = n_indices.at(i+1);
+        int ni2 = n_indices.at(i+2);
 
         m3::vec3 v0 = vertices.at(i0);
         m3::vec3 v1 = vertices.at(i1);
         m3::vec3 v2 = vertices.at(i2);
 
-        this->triangles.push_back(Triangle(v0, v1, v2));
+        m3::vec3 n0 = normals.at(ni0);
+        m3::vec3 n1 = normals.at(ni1);
+        m3::vec3 n2 = normals.at(ni2);
+
+        m3::vec3 normal = m3::vec3::normalize((v1 - v0) % (v2-v1));
+
+        this->triangles.push_back(Triangle(v0, v1, v2, normal));
     }
 
 

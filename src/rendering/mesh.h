@@ -8,8 +8,6 @@
 #include <sstream>
 #include <math3d.h>
 
-#include <iostream>
-
 class Mesh
 {
     private:
