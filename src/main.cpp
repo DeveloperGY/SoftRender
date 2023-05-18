@@ -6,7 +6,9 @@ int main(void)
 {
     // Predefinitions
     const int scale = 4;
-    const int width = 40 * scale * 2, height = 24 * scale;
+    // const int width = 40 * scale * 3, height = 24 * scale * 1.5;
+    const int width = 638, height = 194;
+
 
     const float velocity = 0.05;
     const float rotation = 5;
@@ -25,14 +27,8 @@ int main(void)
     // Generate Models and Cameras
 
     Camera c(m3::vec3(0, 1, 0), 60.0f);
-
-    Model m0("res/cube.obj", TD_COLOR_CYAN);
-    Model m1("res/cube.obj", TD_COLOR_YELLOW);
-
-    m0.translate(0, 0, -3);
-    m1.translate(3, 0, -3);
-
     
+    Model m("res/monkey.obj", TD_COLOR_GREEN);
 
 
     // Render Loop
@@ -67,13 +63,25 @@ int main(void)
         {
             c.rotate(0, -rotation, 0);
         }
+        else if(input == ' ')
+        {
+            c.move(0, velocity, 0);
+        }
+        else if(input == 'v')
+        {
+            c.move(0, -velocity, 0);
+        }
+        else if(input == 'r')
+        {
+            c.rotate(rotation, 0, 0);
+        }
+        else if(input == 'f')
+        {
+            c.rotate(-rotation, 0, 0);
+        }
 
-
-        // m1.rotate(0, 0, 0.4);
-        // m1.rotate(0, 0.4, 0);
-
-        renderer.render(m0, c, true);
-        renderer.render(m1, c, true);
+        m.rotate(5, 5, 5);
+        renderer.render(m, c, false);
 
         renderer.display();
     }

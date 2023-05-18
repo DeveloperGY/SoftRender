@@ -45,12 +45,6 @@ void Renderer::render(Model m, Camera c, bool wireframe)
     {
         // transform the normal
 
-        m3::vec3 n = m3::vec4::as_vec3(view_matrix * model_matrix * m3::vec3::as_vec4(t.normal(), 0));
-        if (m3::vec3::normalize(c.forward()) * m3::vec3::normalize(n) > 0)
-        {
-            continue;
-        }
-
         vertices[0] = mvp_matrix * m3::vec3::as_vec4(t.v0(), 1);
         vertices[1] = mvp_matrix * m3::vec3::as_vec4(t.v1(), 1);
         vertices[2] = mvp_matrix * m3::vec3::as_vec4(t.v2(), 1);
@@ -76,6 +70,20 @@ void Renderer::render(Model m, Camera c, bool wireframe)
 
                 vertices[i] = m3::vec4(x, y, z, w);
             }
+        }
+
+
+        // face normal calculation
+
+        m3::vec3 v_0 = m3::vec4::as_vec3(vertices[0]);
+        m3::vec3 v_1 = m3::vec4::as_vec3(vertices[1]);
+        m3::vec3 v_2 = m3::vec4::as_vec3(vertices[2]);
+
+        m3::vec3 normal = m3::vec3::normalize((v_1 - v_0) % (v_2-v_1));
+
+        if (m3::vec3(0, 0, 1) * normal < 0 && !wireframe)
+        {
+            continue;
         }
 
 
@@ -147,7 +155,7 @@ void Renderer::render(Model m, Camera c, bool wireframe)
                         float e1 = this->edge_cross(m3::vec4::as_vec3(v1), m3::vec4::as_vec3(v2), v);
                         float e2 = this->edge_cross(m3::vec4::as_vec3(v2), m3::vec4::as_vec3(v0), v);
 
-                        if (e0 >= 0 && e1 >= 0 && e2 >= 0)
+                        if (e0 <= 0 && e1 <= 0 && e2 <= 0)
                         {
                             td_drawPoint(x, y, ' ', m.get_color(), m.get_color());
                         }
@@ -157,20 +165,20 @@ void Renderer::render(Model m, Camera c, bool wireframe)
         }
 
 
-        // draw vertices
+        // // draw vertices
 
-        if (v0_in)
-        {
-            td_drawPoint(v0.x(), v0.y(), ' ', m.get_color(), m.get_color());
-        }
-        if (v1_in)
-        {
-            td_drawPoint(v1.x(), v1.y(), ' ', m.get_color(), m.get_color());
-        }
-        if (v2_in)
-        {
-            td_drawPoint(v2.x(), v2.y(), ' ', m.get_color(), m.get_color());
-        }
+        // if (v0_in)
+        // {
+        //     td_drawPoint(v0.x(), v0.y(), ' ', m.get_color(), TD_COLOR_MAGENTA);
+        // }
+        // if (v1_in)
+        // {
+        //     td_drawPoint(v1.x(), v1.y(), ' ', m.get_color(), TD_COLOR_MAGENTA);
+        // }
+        // if (v2_in)
+        // {
+        //     td_drawPoint(v2.x(), v2.y(), ' ', m.get_color(), TD_COLOR_MAGENTA);
+        // }
     }
 
     return;

@@ -11,10 +11,13 @@ class Camera
 
         float fov;
 
-        m3::quat rot;
+        m3::vec3 rot;
 
     public: // Constructors/Destructor
         Camera(m3::vec3 world_up, float fov);
+
+    private: // Utility
+        m3::quat rotation();
 
     public: // Utility
         m3::mat4 get_matrix();
@@ -22,6 +25,5 @@ class Camera
 
         void move(float x, float y, float z);
         void rotate(float x, float y, float z);
-
-        m3::vec3 forward();
+        m3::vec3 direction();
 };
