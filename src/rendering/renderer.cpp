@@ -155,9 +155,25 @@ void Renderer::render(Model m, Camera c, bool wireframe)
                         float e1 = this->edge_cross(m3::vec4::as_vec3(v1), m3::vec4::as_vec3(v2), v);
                         float e2 = this->edge_cross(m3::vec4::as_vec3(v2), m3::vec4::as_vec3(v0), v);
 
+                        float max_e = std::max(e0, std::max(e1, e2));
+                        int color;
+
+                        if (max_e == e0)
+                        {
+                            color = TD_COLOR_RED;
+                        }
+                        else if(max_e == e1)
+                        {
+                            color = TD_COLOR_GREEN;
+                        }
+                        else if (max_e == e2)
+                        {
+                            color = TD_COLOR_BLUE;
+                        }
+
                         if (e0 <= 0 && e1 <= 0 && e2 <= 0)
                         {
-                            td_drawPoint(x, y, ' ', m.get_color(), m.get_color());
+                            td_drawPoint(x, y, ' ', color, color);
                         }
                     }
                 }

@@ -6,8 +6,8 @@ int main(void)
 {
     // Predefinitions
     const int scale = 4;
-    // const int width = 40 * scale * 3, height = 24 * scale * 1.5;
-    const int width = 638, height = 194;
+    const int width = 40 * scale, height = 24 * scale;
+    // const int width = 638, height = 194;
 
 
     const float velocity = 0.05;
@@ -28,7 +28,8 @@ int main(void)
 
     Camera c(m3::vec3(0, 1, 0), 60.0f);
     
-    Model m("res/monkey.obj", TD_COLOR_GREEN);
+    Model m("res/cube.obj", TD_COLOR_GREEN);
+    m.translate(0, 0, -3);
 
 
     // Render Loop
@@ -80,7 +81,7 @@ int main(void)
             c.rotate(-rotation, 0, 0);
         }
 
-        m.rotate(5, 5, 5);
+        m.rotate(0.5, 0.5, 0.5);
         renderer.render(m, c, false);
 
         renderer.display();
