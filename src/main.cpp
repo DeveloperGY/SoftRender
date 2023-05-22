@@ -1,13 +1,12 @@
 #include "rendering/renderer.h"
 
-#include <termDisplay.h>
+#include <td.h>
 
 int main(void)
 {
     // Predefinitions
-    const int scale = 4;
+    const int scale = 2;
     const int width = 40 * scale, height = 24 * scale;
-    // const int width = 638, height = 194;
 
 
     const float velocity = 0.05;
@@ -28,7 +27,7 @@ int main(void)
 
     Camera c(m3::vec3(0, 1, 0), 60.0f);
     
-    Model m("res/cube.obj", TD_COLOR_GREEN);
+    Model m("res/cube.obj", Color(170, 255, 0));
     m.translate(0, 0, -3);
 
 
@@ -83,7 +82,7 @@ int main(void)
 
         m.rotate(0.5, 0.5, 0.5);
         renderer.render(m, c, false);
-
+        
         renderer.display();
     }
 

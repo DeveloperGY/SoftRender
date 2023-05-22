@@ -4,7 +4,7 @@
 #include "model.h"
 #include "camera.h"
 
-#include <termDisplay.h>
+#include <td.h>
 #include <math3d.h>
 #include <iostream>
 

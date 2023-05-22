@@ -1,6 +1,6 @@
 #include "model.h"
 
-Model::Model(std::string filename, int color):
+Model::Model(std::string filename, Color color):
     mesh(filename),
     color(color),
     pos(0, 0, 0),
@@ -19,12 +19,12 @@ m3::mat4 Model::get_matrix()
 }
 
 
-Mesh &Model::get_mesh()
+Mesh Model::get_mesh()
 {
     return this->mesh;
 }
 
-int &Model::get_color()
+Color Model::get_color()
 {
     return this->color;
 }

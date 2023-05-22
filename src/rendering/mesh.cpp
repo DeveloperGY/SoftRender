@@ -58,9 +58,13 @@ Mesh::Mesh(std::string filename)
         int i1 = indices.at(i+1);
         int i2 = indices.at(i+2);
 
-        m3::vec3 v0 = vertices.at(i0);
-        m3::vec3 v1 = vertices.at(i1);
-        m3::vec3 v2 = vertices.at(i2);
+        m3::vec3 v0_coord = vertices.at(i0);
+        m3::vec3 v1_coord = vertices.at(i1);
+        m3::vec3 v2_coord = vertices.at(i2);
+
+        Vertex v0(v0_coord);
+        Vertex v1(v1_coord);
+        Vertex v2(v2_coord);
 
         this->triangles.push_back(Triangle(v0, v1, v2));
     }

@@ -2,7 +2,7 @@
 
 Renderer::Renderer(int width, int height)
 {
-    if (!td_initialize(width, height))
+    if (!td_init(width, height))
     {
         this->initialized = false;
         return;
@@ -45,9 +45,9 @@ void Renderer::render(Model m, Camera c, bool wireframe)
     {
         // transform the normal
 
-        vertices[0] = mvp_matrix * m3::vec3::as_vec4(t.v0(), 1);
-        vertices[1] = mvp_matrix * m3::vec3::as_vec4(t.v1(), 1);
-        vertices[2] = mvp_matrix * m3::vec3::as_vec4(t.v2(), 1);
+        vertices[0] = mvp_matrix * m3::vec3::as_vec4(t.v0().pos(), 1);
+        vertices[1] = mvp_matrix * m3::vec3::as_vec4(t.v1().pos(), 1);
+        vertices[2] = mvp_matrix * m3::vec3::as_vec4(t.v2().pos(), 1);
 
 
         for (int i=0; i<3; i++) // perspective division perspective division
@@ -111,24 +111,23 @@ void Renderer::render(Model m, Camera c, bool wireframe)
 
         // line drawing and rasterization
 
+        td_color model_color = m.get_color().get_data();
+
         if (wireframe)
         {
             if (v0_in && v1_in)
             {
-                td_drawFillRect(0, 0, 2, 2, ' ', TD_COLOR_DEFAULT, TD_COLOR_RED);
-                td_drawLine(v0.x(), v0.y(), v1.x(), v1.y(), ' ', m.get_color(), m.get_color());
+                td_drawLine(v0.x(), v0.y(), v1.x(), v1.y(), ' ', model_color, model_color);
             }
 
             if (v1_in && v2_in)
             {
-                td_drawFillRect(2, 0, 2, 2, ' ', TD_COLOR_DEFAULT, TD_COLOR_GREEN);
-                td_drawLine(v1.x(), v1.y(), v2.x(), v2.y(), ' ', m.get_color(), m.get_color());
+                td_drawLine(v1.x(), v1.y(), v2.x(), v2.y(), ' ', model_color, model_color);
             }
 
             if (v2_in && v0_in)
             {
-                td_drawFillRect(4, 0, 2, 2, ' ', TD_COLOR_DEFAULT, TD_COLOR_BLUE);
-                td_drawLine(v2.x(), v2.y(), v0.x(), v0.y(), ' ', m.get_color(), m.get_color());
+                td_drawLine(v2.x(), v2.y(), v0.x(), v0.y(), ' ', model_color, model_color);
             }
         }
         else
@@ -145,8 +144,12 @@ void Renderer::render(Model m, Camera c, bool wireframe)
                 y_min = std::max(0, y_min);
                 y_max = std::min(y_max, this->height - 1);
 
+                float area = this->edge_cross(m3::vec4::as_vec3(v0), m3::vec4::as_vec3(v1), m3::vec4::as_vec3(v2));
+
+
                 for (int y=y_min; y<=y_max; y++)
                 {
+                    bool is_in_triangle = false;
                     for(int x=x_min; x<=x_max; x++)
                     {
                         m3::vec3 v(x, y, 0);
@@ -155,46 +158,28 @@ void Renderer::render(Model m, Camera c, bool wireframe)
                         float e1 = this->edge_cross(m3::vec4::as_vec3(v1), m3::vec4::as_vec3(v2), v);
                         float e2 = this->edge_cross(m3::vec4::as_vec3(v2), m3::vec4::as_vec3(v0), v);
 
-                        float max_e = std::max(e0, std::max(e1, e2));
-                        int color;
+                        float alpha = e0 / area;
+                        float beta = e1 / area;
+                        float gamma = e2 / area;
 
-                        if (max_e == e0)
-                        {
-                            color = TD_COLOR_RED;
-                        }
-                        else if(max_e == e1)
-                        {
-                            color = TD_COLOR_GREEN;
-                        }
-                        else if (max_e == e2)
-                        {
-                            color = TD_COLOR_BLUE;
-                        }
+                        Color color(255 * alpha, 255 * beta, 255 * gamma);
 
                         if (e0 <= 0 && e1 <= 0 && e2 <= 0)
                         {
-                            td_drawPoint(x, y, ' ', color, color);
+                            td_drawPoint(x, y, ' ', color.get_data(), color.get_data());
+                            is_in_triangle = true;
+                        }
+                        else
+                        {
+                            if (is_in_triangle)
+                            {
+                                break;
+                            }
                         }
                     }
                 }
             }
         }
-
-
-        // // draw vertices
-
-        // if (v0_in)
-        // {
-        //     td_drawPoint(v0.x(), v0.y(), ' ', m.get_color(), TD_COLOR_MAGENTA);
-        // }
-        // if (v1_in)
-        // {
-        //     td_drawPoint(v1.x(), v1.y(), ' ', m.get_color(), TD_COLOR_MAGENTA);
-        // }
-        // if (v2_in)
-        // {
-        //     td_drawPoint(v2.x(), v2.y(), ' ', m.get_color(), TD_COLOR_MAGENTA);
-        // }
     }
 
     return;

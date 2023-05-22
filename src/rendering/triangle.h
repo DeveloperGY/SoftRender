@@ -1,17 +1,20 @@
 #pragma once
 
+#include "vertex.h"
+
 #include <math3d.h>
+#include <td.h>
 
 class Triangle
 {
     private:
-        m3::vec3 vertices[3];
+        Vertex vertices[3];
 
     public: // Constructors/Destructor
-        Triangle(m3::vec3 v0, m3::vec3 v1, m3::vec3 v2);
+        Triangle(Vertex v0, Vertex v1, Vertex v2);
 
     public: // Utility
-        m3::vec3 v0();
-        m3::vec3 v1();
-        m3::vec3 v2();
+        Vertex v0();
+        Vertex v1();
+        Vertex v2();
 };
