@@ -5,7 +5,7 @@
 int main(void)
 {
     // Predefinitions
-    const int scale = 2;
+    const int scale = 4;
     const int width = 40 * scale, height = 24 * scale;
 
 
@@ -27,7 +27,7 @@ int main(void)
 
     Camera c(m3::vec3(0, 1, 0), 60.0f);
     
-    Model m("res/cube.obj", Color(170, 255, 0));
+    Model m("res/cube.obj", Color(255, 255, 255));
     m.translate(0, 0, -3);
 
 
@@ -82,6 +82,7 @@ int main(void)
 
         m.rotate(0.5, 0.5, 0.5);
         renderer.render(m, c, false);
+        renderer.render(m, c, true);
         
         renderer.display();
     }

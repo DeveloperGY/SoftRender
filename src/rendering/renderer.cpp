@@ -43,8 +43,6 @@ void Renderer::render(Model m, Camera c, bool wireframe)
 
     for (auto &t: m.get_mesh().get_triangles())
     {
-        // transform the normal
-
         vertices[0] = mvp_matrix * m3::vec3::as_vec4(t.v0().pos(), 1);
         vertices[1] = mvp_matrix * m3::vec3::as_vec4(t.v1().pos(), 1);
         vertices[2] = mvp_matrix * m3::vec3::as_vec4(t.v2().pos(), 1);
@@ -63,9 +61,9 @@ void Renderer::render(Model m, Camera c, bool wireframe)
             }
             else
             {
-                float x = vertices[i].x() / 0.01;
-                float y = vertices[i].y() / 0.01;
-                float z = vertices[i].z() / 0.01;
+                float x = vertices[i].x() / 0.00001;
+                float y = vertices[i].y() / 0.00001;
+                float z = vertices[i].z() / 0.00001;
                 float w = vertices[i].w();
 
                 vertices[i] = m3::vec4(x, y, z, w);
@@ -106,8 +104,7 @@ void Renderer::render(Model m, Camera c, bool wireframe)
 
         bool v0_in = (v0.z() <= 1) && (v0.z() >= -1);
         bool v1_in = (v1.z() <= 1) && (v1.z() >= -1);
-        bool v2_in = (v2.z() <= 1) && (v2.z() >= -1);        
-
+        bool v2_in = (v2.z() <= 1) && (v2.z() >= -1);
 
         // line drawing and rasterization
 
@@ -123,6 +120,7 @@ void Renderer::render(Model m, Camera c, bool wireframe)
             if (v1_in && v2_in)
             {
                 td_drawLine(v1.x(), v1.y(), v2.x(), v2.y(), ' ', model_color, model_color);
+                // v1 error
             }
 
             if (v2_in && v0_in)
@@ -162,7 +160,7 @@ void Renderer::render(Model m, Camera c, bool wireframe)
                         float beta = e1 / area;
                         float gamma = e2 / area;
 
-                        Color color(255 * alpha, 255 * beta, 255 * gamma);
+                        Color color(model_color.red * alpha, model_color.green * beta, model_color.blue * gamma);
 
                         if (e0 <= 0 && e1 <= 0 && e2 <= 0)
                         {
